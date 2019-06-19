@@ -9,7 +9,8 @@ module.exports = {
 
 function find() {
   return db('users')
-  .select('id', 'username', 'password');
+  .select('id', 'username', 'password', 'numRounds', 'salt')
+
 }
 
 function findBy(filter) {

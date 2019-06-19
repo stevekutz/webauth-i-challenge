@@ -111,6 +111,7 @@ server.get('/api/users', authorizeMW, (req, res) => {
     .catch(err => res.send(err));
 });
 
+/*
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // create Custom Middleware for AuthZ-> R U allowed to get what do you want?
 function authorize(req, res, next) {
@@ -171,7 +172,7 @@ const password = req.headers['x-password'];
   });
 }
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+*/
 
 //  STAYS
 const port = process.env.PORT || 5001;
