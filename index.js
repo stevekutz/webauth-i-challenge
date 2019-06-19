@@ -89,7 +89,80 @@ server.post('/api/login', (req, res) => {
       });
   });
 
+// Return list of all Users 
+// This route MUST BE PROTECTED !!!
+// user MUST be logged in(pass valid credentials)
+//  
+// we pass in middleware   V
+// server.get('/api/users', (req, res) => {
 
+server.get('/api/users', authorize, (req, res) => {
+  Users.find()
+    .then(users => {
+      res.json(users);
+    })
+    .catch(err => res.send(err));
+});
+
+
+// create Custom Middleware for AuthZ-> R U allowed to get what do you want?
+function authorize(req, res, next) {
+  // define custom headers by prefixing with x-
+const username = req.headers['x-username'];
+const password = req.headers['x-password'];
+
+
+  console.log('username header ===> ', username);
+  console.log('password header ===> ', password);
+
+    // check for header missing entirely
+    // CANNOT put this inside findBy or else {} is returned
+    if(username === undefined || password === undefined) {
+        return res.status(451).json({
+            message: ` Totally missing header info`
+        })
+    }    
+
+
+
+  // we copied from above
+  Users.findBy({ username })
+  .first()
+  .then(user => {
+    // check for header missing entirely
+    if(username === undefined || password === undefined) {
+        return res.status(451).json({
+            message: ` Totally missing header info`
+        })
+    }
+
+    // we check for blank inputs
+    if(!username || !password) {
+      // must return to break out of middleware function
+      return res.status(401).json({
+        message: `Invalid Credentials: Enter a username and password`
+      })
+    }
+
+    // Add BELOW    // user.password  is the stored bcrypted hash
+    //       const isValidPW = bcrypt.compareSync(password, user.password);
+    // We put bcrypt.compareSync into if statement BECAUSE
+    // if user not defined, the first part will bail out of if statement
+    // BEFORE going to bcrytpt comparSync part using user.password
+  
+  if (user && bcrypt.compareSync(password, user.password) ) {   // ADDED   && isValidPW
+      next();   // need next here to let endpoint proceed
+      // line below will cause error as we are adding multiple things to be returned
+          //  AFTER providing Welcome message
+      // res.status(200).json({ message: `Welcome ${user.username}!` });
+    } else {
+      res.status(401).json({ message: 'Invalid Credentials says the  middleware' });
+    }
+  })
+  .catch(error => {
+    res.status(500).json(error);
+  });
+}
 
 
 
