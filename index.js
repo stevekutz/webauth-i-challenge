@@ -4,10 +4,14 @@ const helmet = require('helmet'); // WBM - server
 const cors = require('cors'); // WBM - server
 const bcrypt = require('bcryptjs');   // WBM - server
 
+// we import in customer middleware
+const authorizeMW = require('./myMiddleware/myMiddleWare') 
+
 const db = require('./data/dbConfig.js');  // WBM - router
 const Users = require('./users/users-model.js'); // WBM to specific router
 
 const server = express();   // WBM - server
+
 
 
 // ALL WBM - server
@@ -96,7 +100,10 @@ server.post('/api/login', (req, res) => {
 // we pass in middleware   V
 // server.get('/api/users', (req, res) => {
 
-server.get('/api/users', authorize, (req, res) => {
+// just made middleware in seperate file
+//   ORIG >>     server.get('/api/users', authorize, (req, res) => {
+
+server.get('/api/users', authorizeMW, (req, res) => {
   Users.find()
     .then(users => {
       res.json(users);
@@ -104,7 +111,7 @@ server.get('/api/users', authorize, (req, res) => {
     .catch(err => res.send(err));
 });
 
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // create Custom Middleware for AuthZ-> R U allowed to get what do you want?
 function authorize(req, res, next) {
   // define custom headers by prefixing with x-
@@ -163,7 +170,7 @@ const password = req.headers['x-password'];
     res.status(500).json(error);
   });
 }
-
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 //  STAYS
