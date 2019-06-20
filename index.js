@@ -13,11 +13,11 @@ const Users = require('./users/users-model.js'); // WBM to specific router
 const server = express();   // WBM - server
 
 
-
 // ALL WBM - server
 server.use(helmet());   // hides X-Powered by -> Express
 server.use(express.json());   // parses incoming requests
-server.use(cors());
+server.use(cors()); // ??? 
+
 
 
 // WBM - server
@@ -27,12 +27,10 @@ server.get('/', (req, res) => {
 });
 
 
-
 // helper functions WBM - specific model
 // Creates the Account Login - we MUST hash the password, adds to user table
 //  username: groot      // add numbers to this to keep testing simple
 //  password: iamgroot   // add numbers to this to keep testing simple
-
 server.post('/api/register', (req, res) => {
     let user = req.body;
   
@@ -52,7 +50,7 @@ server.post('/api/register', (req, res) => {
   
     // this auto-gens salt & hash, time complexity of 2^14 
     const hash = bcrypt.hashSync(user.password, 14); // will loop hash 4096 times
-    user.password = hash;
+    user.password = hash;    // we overose user's submitted PW with hashed PW
   
     console.log('>>> user obj is ', user);
     console.group();
@@ -77,7 +75,8 @@ server.post('/api/login', (req, res) => {
     let { username, password } = req.body;   // Login creds passed in here
   
     Users.findBy({ username })
-      .first()
+      .first()   // ???  
+      // per knex >> Sets the column to be inserted on the first position, only used in MySQL alter tables.
       .then(user => {
   
         // Add BELOW    // user.password  is the stored bcrypted hash
@@ -110,69 +109,6 @@ server.get('/api/users', authorizeMW, (req, res) => {
     })
     .catch(err => res.send(err));
 });
-
-/*
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// create Custom Middleware for AuthZ-> R U allowed to get what do you want?
-function authorize(req, res, next) {
-  // define custom headers by prefixing with x-
-const username = req.headers['x-username'];
-const password = req.headers['x-password'];
-
-
-  console.log('username header ===> ', username);
-  console.log('password header ===> ', password);
-
-    // check for header missing entirely
-    // CANNOT put this inside findBy or else {} is returned
-    if(username === undefined || password === undefined) {
-        return res.status(451).json({
-            message: ` Totally missing header info`
-        })
-    }    
-
-
-
-  // we copied from above
-  Users.findBy({ username })
-  .first()
-  .then(user => {
-    // check for header missing entirely
-    if(username === undefined || password === undefined) {
-        return res.status(451).json({
-            message: ` Totally missing header info`
-        })
-    }
-
-    // we check for blank inputs
-    if(!username || !password) {
-      // must return to break out of middleware function
-      return res.status(401).json({
-        message: `Invalid Credentials: Enter a username and password`
-      })
-    }
-
-    // Add BELOW    // user.password  is the stored bcrypted hash
-    //       const isValidPW = bcrypt.compareSync(password, user.password);
-    // We put bcrypt.compareSync into if statement BECAUSE
-    // if user not defined, the first part will bail out of if statement
-    // BEFORE going to bcrytpt comparSync part using user.password
-  
-  if (user && bcrypt.compareSync(password, user.password) ) {   // ADDED   && isValidPW
-      next();   // need next here to let endpoint proceed
-      // line below will cause error as we are adding multiple things to be returned
-          //  AFTER providing Welcome message
-      // res.status(200).json({ message: `Welcome ${user.username}!` });
-    } else {
-      res.status(401).json({ message: 'Invalid Credentials says the  middleware' });
-    }
-  })
-  .catch(error => {
-    res.status(500).json(error);
-  });
-}
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-*/
 
 //  STAYS
 const port = process.env.PORT || 5001;
