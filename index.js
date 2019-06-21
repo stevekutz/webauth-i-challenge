@@ -23,7 +23,9 @@ server.use(cors()); // ???
 // WBM - server
 // root access sanity check
 server.get('/', (req, res) => {
-    res.send(` <h2> WebAuthorization SANITY Check !!! </h2>`)
+  // for res.cookie,  header shows>>  Set-Cookie: my cookie yo=dat's%20my%20cookie; Path=/
+  res.cookie('my cookie yo', 'dat\'s my cookie');  // ??? WATCH Spaces
+  res.send(` <h2> WebAuthorization SANITY Check !!! </h2>`)
 });
 
 
@@ -50,7 +52,7 @@ server.post('/api/register', (req, res) => {
   
     // this auto-gens salt & hash, time complexity of 2^14 
     const hash = bcrypt.hashSync(user.password, 14); // will loop hash 4096 times
-    user.password = hash;    // we overose user's submitted PW with hashed PW
+    user.password = hash;    // we ovewrite user's submitted PW with hashed PW
   
     console.log('>>> user obj is ', user);
     console.group();
