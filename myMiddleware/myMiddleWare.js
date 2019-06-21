@@ -1,7 +1,10 @@
 
-
+// Simplified !!!  - Just checks if server session exists
 module.exports = (req, res, next) => {
-  // we have sessions info stored
+  // we have session info stored
+  console.log('**** MW says req.session is \n', req.session);
+  console.log('**** MW says req.session.user is \n', req.session.user);
+
   if(req.session & req.session.user) {
     next();  // allow end point help function to proceed
   } else {
@@ -9,8 +12,6 @@ module.exports = (req, res, next) => {
       message: ' you are not MW authorized'
     })
   }
-
-
 }
 
 
