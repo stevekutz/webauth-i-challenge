@@ -1,6 +1,26 @@
+
+
+module.exports = (req, res, next) => {
+  // we have sessions info stored
+  if(req.session & req.session.user) {
+    next();  // allow end point help function to proceed
+  } else {
+    res.status(401).json({
+      message: ' you are not MW authorized'
+    })
+  }
+
+
+}
+
+
+
+
+/*
+
 const bcrypt = require('bcryptjs');   // WBM - server
-const db = require('../data/dbConfig');  // WBM - router
 const Users = require('../users/users-model'); // WBM to specific router
+const db = require('../data/dbConfig');  // WBM - router
 
 
 // create Custom Middleware for AuthZ-> R U allowed to get what do you want?
@@ -60,3 +80,4 @@ module.exports = function authorizeMW(req, res, next) {
       res.status(500).json(error);
     });
   }
+  */
