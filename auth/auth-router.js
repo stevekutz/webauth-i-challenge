@@ -85,27 +85,6 @@ router.post('/login', (req, res) => {
 // >>>>>>>>>>>>>>>>>>>>>>>   LOGOUT & remove session    >>>>>>>>>>>>>>>>>>>>>
 //  session info is set up in server.js, we ADD session info to LOGIN
 
-/*
-  router.get('/logout', restrictedMW, (req, res) => {
-    console.log(`Logout b4 destoy session`, req.session);
-
-    req.session.destroy(err => {
-        if(err) {
-            console.log(err);
-            return res.status(500).json({
-                message: `Logout Error occurred`,
-                error: err,
-            })
-        } else {
-
-            console.log('session after destroy is ', req.session);
-            res.status(200).json({
-                message: `Session nuked`
-            })
-        }
-    })
-  })
-*/
 router.get('/logout', restrictedMW, (req, res) => {
   
     console.log(' Logout will remove session from memory or db');

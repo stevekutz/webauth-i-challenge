@@ -27,7 +27,7 @@ const server = express(); // defines express app as server obj
 
 // THIS is needed to define session in our db instead of server memory
 // this returns a class, so we use Uppercase (I think it is like a HOC)
-//      const SessionStore = require('connect-session-knex')(session); // might need an npm install here
+      const SessionStore = require('connect-session-knex')(session); // might need an npm install here
 
 const sessionConfig = {
     name: 'monkeyChallenge', // session name,
@@ -39,13 +39,13 @@ const sessionConfig = {
       secure: false,   // true for HTTPS, false for HTTP, need SSL cert for HTTPS
       httpOnly: true, // Set-Cookie attribute, we DO NOT want session coookie avail to JavaScript
     },    // WE add below AFTER installing connect-session-knex to create db Storage
- //   store: new SessionStore({
- //     knex: require('../database/dbConfig'),  // provides knex instance
- //     tablename: 'sessions',   // table name in db
- //     sidfieldname: 'sid',    // column name in sessions table
- //     createtable: true,    // create this table if it exists
- //     clearInterval:  60*60*1000 // time in ms the session will expire 60sec * 60min * 1000ms
- //   })     
+    store: new SessionStore({
+    knex: require('./data/dbConfig'),  // provides knex instance
+      tablename: 'sessions',   // table name in db
+     sidfieldname: 'sid',    // column name in sessions table
+     createtable: true,    // create this table if it exists
+     clearInterval:  60*60*1000 // time in ms the session will expire 60sec * 60min * 1000ms
+    })     
   }
 
 
@@ -58,7 +58,8 @@ server.use(session(sessionConfig)); // NOTICE sessionConfig here !
 
 // define actual endpoints for router objects
 server.use('/auth', authRouter);
-server.use('/users', usersRouter);
+// server.use('/users', usersRouter);
+server.use('/api/users', usersRouter);  // changed route to include /api/
 
 
 // SANITY CHECK - this time we get JSON response
