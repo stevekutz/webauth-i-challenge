@@ -1,3 +1,13 @@
+const server = require('./server');
+
+
+const port = process.env.PORT || 5001;
+server.listen(port, () => console.log(`\n** Running on port ${port} **\n`));
+
+
+/*
+
+
 //    WBM >> will be moved
 const express = require('express'); // WBM - server
 const helmet = require('helmet'); // WBM - server
@@ -112,6 +122,10 @@ server.get('/api/users', authorizeMW, (req, res) => {
     .catch(err => res.send(err));
 });
 
+
+
 //  STAYS
 const port = process.env.PORT || 5001;
 server.listen(port, () => console.log(`\n** Running on port ${port} **\n`));
+
+*/
