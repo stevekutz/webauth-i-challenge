@@ -21,7 +21,7 @@ const session = require('express-session');   // ADDED here
 // Define routers
 const authRouter = require('./auth/auth-router.js'); 
 // const restrictRouter = require('./restricted/restricted-router');
-// const userRouter = require('./users/users-router');
+const usersRouter = require('./users/users-router');
 
 const server = express(); // defines express app as server obj 
 
@@ -57,8 +57,8 @@ server.use(session(sessionConfig)); // NOTICE sessionConfig here !
 
 
 // define actual endpoints for router objects
- server.use('/auth', authRouter);
-// server.use('/api/users', usersRouter);
+server.use('/auth', authRouter);
+server.use('/users', usersRouter);
 
 
 // SANITY CHECK - this time we get JSON response
