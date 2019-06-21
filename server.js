@@ -1,4 +1,4 @@
-// SETUP and verify proejct in index.js, THEN seperate components, router, etc.
+// SETUP and verify project in index.js, THEN seperate components, router, etc.
 
 
 // server.js
@@ -19,7 +19,7 @@ const session = require('express-session');   // ADDED here
 
 
 // Define routers
-//const authRouter = require('./auth/auth-router'); 
+const authRouter = require('./auth/auth-router.js'); 
 // const restrictRouter = require('./restricted/restricted-router');
 // const userRouter = require('./users/users-router');
 
@@ -57,7 +57,7 @@ server.use(session(sessionConfig)); // NOTICE sessionConfig here !
 
 
 // define actual endpoints for router objects
-// server.use('/api/auth', authRouter);
+ server.use('/auth', authRouter);
 // server.use('/api/users', usersRouter);
 
 
