@@ -30,7 +30,7 @@ const server = express(); // defines express app as server obj
 //      const SessionStore = require('connect-session-knex')(session); // might need an npm install here
 
 const sessionConfig = {
-    name: 'monkey', // session name,
+    name: 'monkeyChallenge', // session name,
     secret: 'super secret string' , // used to sign/encrypt the session ID cookie
     resave: false,  // it avoids re-creating an unchanged session
     saveUninitialized: false,   // prevents setting cookies automatically

@@ -1,23 +1,26 @@
 
-// Simplified !!!  - Just checks if server session exists
+
+
 module.exports = (req, res, next) => {
-  // we have session info stored
   console.log('**** MW says req.session is \n', req.session);
   console.log('**** MW says req.session.user is \n', req.session.user);
+  
+  
+  // we have session data stored
+  if(req.session && req.session.user) {
+    next();
 
-  if(req.session & req.session.user) {
-    next();  // allow end point help function to proceed
   } else {
     res.status(401).json({
-      message: ' you are not MW authorized'
+      message: ` you are NOT MW authorized`
     })
+
   }
 }
 
 
 
-
-/*
+/*  DON'T NEED after we have check for session
 
 const bcrypt = require('bcryptjs');   // WBM - server
 const Users = require('../users/users-model'); // WBM to specific router
