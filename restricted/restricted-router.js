@@ -50,7 +50,7 @@ router.post('/', async(req, res) => {
     
     if( fav_color === '' || fav_word === '' || fav_food === '') {
         res.status(400).json({
-            message: `you need to enter a color, word, or food`
+            message: `you need to enter a color, word, and food`
         })
     } else {
         const color = await Restricted.add(req.body);

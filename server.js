@@ -68,7 +68,7 @@ server.use('/api/restricted', restrictRouter);
 // CUSTOM MIDDLEWARE to verify retricted route
 function routePrefixCheck (req, res, next) {
 
-    if(req.baseUrl === 'req.baseUrl'){
+    if(req.baseUrl === '/api/restricted'){
         console.log('%%% resticted route !!!!!\n');
         next();
     } else {
