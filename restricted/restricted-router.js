@@ -1,5 +1,7 @@
-const express = require('express');  // MUST add this, not needed in other routers
-const router = express.Router();
+// const express = require('express');  // MUST add this, not needed in other routers
+// const router = express.Router();
+const router = require('express').Router();
+
 const Restricted = require('./restricted-model')
 
 

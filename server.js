@@ -63,6 +63,8 @@ server.use('/api/users', usersRouter);  // changed route to include /api/
 
 server.use('/api/restricted', restrictRouter);
 
+
+//  server.use(routePrefixCheck);  // MUST Mount custom middleware
 /*
 // ??? Why is this not seen in restricted-router
 // CUSTOM MIDDLEWARE to verify retricted route
