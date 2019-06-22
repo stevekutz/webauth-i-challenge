@@ -3,8 +3,14 @@ const router = express.Router();
 const Restricted = require('./restricted-model')
 
 
+const sessionCheck = require('../myMiddleware/myMiddleWare');
+const routeCheck = require('../myMiddleware/restrictedMiddleWare');
+
 // GET ALL color items in restricto table
-router.get('/colors', async (req, res) => {
+router.get('/colors',  sessionCheck,  routeCheck, async (req, res) => {
+   
+    console.log('$$$$$ inside colors, req is ', req.baseUrl);
+    
     try {
         const colors = await Restricted.getColors();
         res.status(200).json(colors);
@@ -18,7 +24,7 @@ router.get('/colors', async (req, res) => {
 });
 
 // GET all food items in restricto table
-router.get('/foods', async (req, res) => {
+router.get('/foods', sessionCheck, routeCheck, async (req, res) => {
     await Restricted.getFoods()
         .then(foods => {
             res.status(451).json(foods);
@@ -39,9 +45,12 @@ router.get('/words', (req, res) => {
 
 // ADD to restricto table
 router.post('/', async(req, res) => {
-    if(req.body.fav_color === '') {
+    const{ fav_color, fav_word, fav_food} = req.body; 
+    
+    
+    if( fav_color === '' || fav_word === '' || fav_food === '') {
         res.status(400).json({
-            message: `you need to enter a color`
+            message: `you need to enter a color, word, or food`
         })
     } else {
         const color = await Restricted.add(req.body);

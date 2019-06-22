@@ -69,7 +69,7 @@ router.post('/login', (req, res) => {
             console.log(`++++  Session obj now updated with user info\n`, req.session);
 
             res.status(200).json({
-                messge: `Welcome user with name ${username} !!! `,
+                messge: `Logged in, Welcome user with name ${username} !!! `,
             });
         } else {
           res.status(401).json({ 

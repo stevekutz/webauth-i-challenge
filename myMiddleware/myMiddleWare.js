@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
   } else {
     res.status(401).json({
-      message: ` you are NOT MW authorized`
+      message: ` You shall not pass, you are NOT MW authorized`
     })
 
   }

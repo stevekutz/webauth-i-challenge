@@ -55,12 +55,31 @@ server.use(express.json());
 server.use(cors());
 server.use(session(sessionConfig)); // NOTICE sessionConfig here !
 
+//  server.use(routePrefixCheck);  // MUST Mount custom middleware
 
 // define actual endpoints for router objects
 server.use('/auth', authRouter);
 server.use('/api/users', usersRouter);  // changed route to include /api/
 
 server.use('/api/restricted', restrictRouter);
+
+/*
+// ??? Why is this not seen in restricted-router
+// CUSTOM MIDDLEWARE to verify retricted route
+function routePrefixCheck (req, res, next) {
+
+    if(req.baseUrl === 'req.baseUrl'){
+        console.log('%%% resticted route !!!!!\n');
+        next();
+    } else {
+        res.status(451).json({
+            message: `You cannot get here`
+        })
+    }
+    
+}
+*/
+
 
 // SANITY CHECK - this time we get JSON response
 server.get('/', (req, res) => {
