@@ -8,6 +8,8 @@ const Restricted = require('./restricted-model')
 const sessionCheck = require('../myMiddleware/myMiddleWare');
 const routeCheck = require('../myMiddleware/restrictedMiddleWare');
 
+const myMiddleware2 = require('../myMiddleware/myMiddleware2');
+
 // GET ALL color items in restricto table
 router.get('/colors',  sessionCheck,  routeCheck, async (req, res) => {
    
@@ -24,9 +26,14 @@ router.get('/colors',  sessionCheck,  routeCheck, async (req, res) => {
          })
      }
 });
+ 
+// adding in GLOBAL middleware from server.js
+//    routePrefixCheck2
 
+
+//    router.get('/foods', sessionCheck, async (req, res) => {
 // GET all food items in restricto table
-router.get('/foods', sessionCheck, routeCheck, async (req, res) => {
+router.get('/foods', myMiddleware2.myLogger2, myMiddleware2.checkSession2, async (req, res) => {
     await Restricted.getFoods()
         .then(foods => {
             res.status(451).json(foods);

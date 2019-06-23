@@ -52,7 +52,7 @@ router.post('/register', (req,res) => {
 
 // >>>>>>>>>>>>>>>>>>>>>>>   LOGIN    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //  session info is set up in server.js, we ADD session info to LOGIN
-router.post('/login', (req, res) => {
+router.post('/login', myLogger,(req, res) => {
     let { username, password } = req.body;
   
     Auth.findBy({ username })
@@ -110,6 +110,22 @@ router.get('/logout', restrictedMW, (req, res) => {
   
   
   });
+
+function myLogger(req, res, next){
+    
+    console.log('>>> myLogger called');
+
+    console.log(
+        ` >>> a ${req.method} method Requesteeee was made 
+          >>> from url  ${req.url} 
+          >>> at ${new Date().toISOString()}  from myLogger`);
+
+    next();
+};
+
+
+
+
 
 // DON'T FORGET THIS !!!!!!!!
 module.exports = router;

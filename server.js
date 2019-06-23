@@ -18,6 +18,9 @@ const session = require('express-session');   // ADDED here
 // const Users = require('./users/users-model.js');  // WBM users-router
 
 
+// WE DEFINE middleware2 in server
+const myLogger2 = require('./myMiddleware/myMiddleware2');
+
 // Define routers
 const authRouter = require('./auth/auth-router.js'); 
 const restrictRouter = require('./restricted/restricted-router');
@@ -64,11 +67,12 @@ server.use('/api/users', usersRouter);  // changed route to include /api/
 server.use('/api/restricted', restrictRouter);
 
 
-//  server.use(routePrefixCheck);  // MUST Mount custom middleware
+// server.use(routePrefixCheck2);  // MUST Mount custom middleware
+
 /*
 // ??? Why is this not seen in restricted-router
 // CUSTOM MIDDLEWARE to verify retricted route
-function routePrefixCheck (req, res, next) {
+function routePrefixCheck2 (req, res, next) {
 
     if(req.baseUrl === '/api/restricted'){
         console.log('%%% resticted route !!!!!\n');
@@ -78,13 +82,26 @@ function routePrefixCheck (req, res, next) {
             message: `You cannot get here`
         })
     }
-    
+   next(); 
 }
 */
+server.use(myLogger);
+// custom middleware callbacks definitions
+// myLogger
+function myLogger(req, res, next){
+    
+    console.log('>>> myLogger called');
 
+    console.log(
+        ` >>> a ${req.method} method Requesteeee was made 
+          >>> from url  ${req.url} 
+          >>> at ${new Date().toISOString()}  from myLogger`);
+
+    next();
+};
 
 // SANITY CHECK - this time we get JSON response
-server.get('/', (req, res) => {
+server.get('/' , myLogger, (req, res) => {
     res.cookie('testCookie', 'blahblahblah'); // ADDED
     res.json({ api: 'JSONstyleResponseWorkinGood' });
   });
